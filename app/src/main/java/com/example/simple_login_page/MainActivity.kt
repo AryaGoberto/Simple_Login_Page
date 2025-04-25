@@ -54,99 +54,99 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             Simple_Login_PageTheme {
-                Box(modifier = Modifier
-                    .fillMaxSize()
-                    .paint(
-                        painterResource(id = R.drawable.jclogin),
-                        contentScale = ContentScale.FillBounds
-                    )
-                ){
-                    val navController = rememberNavController()
-                    NavGraph(navController)
-                }
+                val navController = rememberNavController()
+                NavGraph(navController)
             }
         }
     }
 }
 
 @Composable
-fun LoginScreen(onLoginSuccess:()->Unit) {
+fun LoginScreen(onLoginSuccess: () -> Unit) {
+    var username by remember { mutableStateOf("") }
+    var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
 
-    var username by remember{
-        mutableStateOf("")
-    }
-    var password by remember{
-        mutableStateOf("")
-    }
-
-    val context = LocalContext.current.applicationContext
-    Column(modifier = Modifier
-        .fillMaxSize()
-        .padding(horizontal = 26.dp, vertical = 140.dp),
-        verticalArrangement = Arrangement.Bottom,
-        horizontalAlignment = Alignment.CenterHorizontally
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .paint(
+                painterResource(id = R.drawable.jclogin),
+                contentScale = ContentScale.FillBounds
+            )
     ) {
-        OutlinedTextField(
-            value = username,
-            onValueChange = {username = it},
-            label = {Text(text = "Username")},
-            colors = TextFieldDefaults.colors(
-                focusedLeadingIconColor = Greens,
-                unfocusedLeadingIconColor = Greens,
-                focusedLabelColor = Greens,
-                unfocusedLabelColor = Greens,
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                focusedIndicatorColor = Greens,
-                unfocusedIndicatorColor = Greens,
-                unfocusedPlaceholderColor = Greens,
-            ),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "Username")
-            },
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp)
-        )
-
-        //password
-        OutlinedTextField(
-            value = password,
-            onValueChange = {password = it},
-            label = {Text(text = "Password")},
-            colors = TextFieldDefaults.colors(
-                focusedLeadingIconColor = Greens,
-                unfocusedLeadingIconColor = Greens,
-                focusedLabelColor = Greens,
-                unfocusedLabelColor = Greens,
-                focusedContainerColor = Color.White,
-                unfocusedContainerColor = Color.White,
-                focusedIndicatorColor = Greens,
-                unfocusedIndicatorColor = Greens,
-                unfocusedPlaceholderColor = Greens,
-            ),
-            leadingIcon = {
-                Icon(imageVector = Icons.Default.Person, contentDescription = "Password")
-            },
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 8.dp),
-            visualTransformation = PasswordVisualTransformation()
-        )
-
-        Button(onClick = {
-            if(authenticate(username, password)){
-                onLoginSuccess()
-                Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
-            } else{
-                Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
-            }
-        },
-            colors = ButtonDefaults.buttonColors(containerColor = Greens),
-            contentPadding = PaddingValues(start = 60.dp, end = 60.dp, top = 8.dp, bottom = 8.dp),
-            modifier = Modifier.padding(top = 18.dp)
+                .fillMaxSize()
+                .padding(horizontal = 26.dp, vertical = 140.dp),
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(text = "Login", fontSize = 22.sp)
+            // Username field
+            OutlinedTextField(
+                value = username,
+                onValueChange = { username = it },
+                label = { Text(text = "Username") },
+                colors = TextFieldDefaults.colors(
+                    focusedLeadingIconColor = Greens,
+                    unfocusedLeadingIconColor = Greens,
+                    focusedLabelColor = Greens,
+                    unfocusedLabelColor = Greens,
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = Greens,
+                    unfocusedIndicatorColor = Greens,
+                    unfocusedPlaceholderColor = Greens,
+                ),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Person, contentDescription = "Username")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp)
+            )
+
+            // Password field
+            OutlinedTextField(
+                value = password,
+                onValueChange = { password = it },
+                label = { Text(text = "Password") },
+                colors = TextFieldDefaults.colors(
+                    focusedLeadingIconColor = Greens,
+                    unfocusedLeadingIconColor = Greens,
+                    focusedLabelColor = Greens,
+                    unfocusedLabelColor = Greens,
+                    focusedContainerColor = Color.White,
+                    unfocusedContainerColor = Color.White,
+                    focusedIndicatorColor = Greens,
+                    unfocusedIndicatorColor = Greens,
+                    unfocusedPlaceholderColor = Greens,
+                ),
+                leadingIcon = {
+                    Icon(imageVector = Icons.Default.Person, contentDescription = "Password")
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp),
+                visualTransformation = PasswordVisualTransformation()
+            )
+
+            // Login button
+            Button(
+                onClick = {
+                    if (authenticate(username, password)) {
+                        onLoginSuccess()
+                        Toast.makeText(context, "Login Successful", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(context, "Invalid Credentials", Toast.LENGTH_SHORT).show()
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(containerColor = Greens),
+                contentPadding = PaddingValues(start = 60.dp, end = 60.dp, top = 8.dp, bottom = 8.dp),
+                modifier = Modifier.padding(top = 18.dp)
+            ) {
+                Text(text = "Login", fontSize = 22.sp)
+            }
         }
     }
 }
@@ -158,28 +158,17 @@ private fun authenticate(username: String, password:String): Boolean{
 }
 
 @Composable
-fun homeScreen() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text(text = "Welcome to Home Screen!")
-    }
-}
-
-@Composable
 fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = "login") {
         composable("login") {
             LoginScreen(onLoginSuccess = {
                 navController.navigate("home") {
-                    popUpTo("login") { inclusive = true }
+                    popUpTo(0){ inclusive = true }
                 }
             })
         }
         composable("home") {
-            homeScreen()
+            HomeScreen()
         }
     }
 }
